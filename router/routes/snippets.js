@@ -4,7 +4,6 @@
 
 var express = require('express'),
     router = express.Router(),
-    config = require ('../../config.json'),
     base = require('../../database/queries');
 
 
