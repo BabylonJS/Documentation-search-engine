@@ -6,20 +6,20 @@ var tedious = require('tedious');
 
 // ***************************** DATABASE CONNECTION INFOS *****************************
 
-var azureStorageAccount = process.env.AZURE_STORAGE_ACCOUNT || config.database.AZURE_STORAGE_ACCOUNT;
-var azureStorageAccessKey = process.env.AZURE_STORAGE_ACCESS_KEY || config.database.AZURE_STORAGE_ACCESS_KEY;
-var tableService = azureStorage.createTableService(azureStorageAccount,azureStorageAccessKey);
+// var azureStorageAccount = process.env.AZURE_STORAGE_ACCOUNT || config.database.AZURE_STORAGE_ACCOUNT;
+// var azureStorageAccessKey = process.env.AZURE_STORAGE_ACCESS_KEY || config.database.AZURE_STORAGE_ACCESS_KEY;
+// var tableService = azureStorage.createTableService(azureStorageAccount,azureStorageAccessKey);
 
-var mysqlHost = process.env.MySQL_Host || config.database.MySQL_Host;
-var mysqlUser = process.env.MySQL_User || config.database.MySQL_User;
-var mysqlPassword = process.env.MySQL_Password || config.database.MySQL_Password;
-var mysqlDatabase = process.env.MySQL_Database || config.database.MySQL_Database;
-var mysqlService = mysql.createConnection({
-    host : mysqlHost,
-    user : mysqlUser,
-    password : mysqlPassword,
-    database : mysqlDatabase
-});
+// var mysqlHost = process.env.MySQL_Host || config.database.MySQL_Host;
+// var mysqlUser = process.env.MySQL_User || config.database.MySQL_User;
+// var mysqlPassword = process.env.MySQL_Password || config.database.MySQL_Password;
+// var mysqlDatabase = process.env.MySQL_Database || config.database.MySQL_Database;
+// var mysqlService = mysql.createConnection({
+//     host : mysqlHost,
+//     user : mysqlUser,
+//     password : mysqlPassword,
+//     database : mysqlDatabase
+// });
 
 var tediousService = null;
 var connectionConfig = {
