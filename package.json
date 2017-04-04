@@ -7,7 +7,9 @@
     "body-parser": "latest",
     "crypto": "latest",
     "express": "latest",
-    "random-key": "latest"
+    "mysql": "latest",
+    "random-key": "latest",
+    "tedious": "latest"
   },
   "license": "MIT",
   "repository": {
