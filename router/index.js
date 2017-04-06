@@ -3,13 +3,6 @@ module.exports = function (app) {
 
     var path = require('path');
 
-    // Default route. Return 400
-    app.get('/', function(req, res) {
-        res.status(400);
-        res.header("Access-Control-Allow-Origin", "*");
-        res.sendFile(path.join(__dirname, '../', '/public/index.html'));
-    });
-
     // API routes
     app.use('/snippets', require('./routes/snippets'));
 
