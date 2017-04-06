@@ -1,7 +1,3 @@
-/*************************************************************************
- *                             REQUIREMENTS                              *
- ************************************************************************/
-
 var express = require('express'),
     router = express.Router(),
     base = require('../../database/queries');
@@ -208,7 +204,7 @@ router.post('/count/code', function(req, res) {
                 "terms": req.body.search
             },
             function(result) {
-                if(result != null && result.length > 0) send200(res, result);
+                if(result != null && result.count) send200(res, result);
                 else send204(res);
             },
             function(error) {
@@ -227,7 +223,7 @@ router.post('/count/name', function(req, res) {
                 "terms": req.body.search
             },
             function(result) {
-                if(result != null && result.length > 0) send200(res, result);
+                if(result != null && result.count) send200(res, result);
                 else send204(res);
             },
             function(error) {
@@ -246,7 +242,7 @@ router.post('/count/tags', function(req, res) {
                 "terms": req.body.search
             },
             function(result) {
-                if(result != null && result.length > 0) send200(res, result);
+                if(result != null && result.count) send200(res, result);
                 else send204(res);
             },
             function(error) {

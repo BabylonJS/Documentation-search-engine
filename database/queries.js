@@ -77,6 +77,12 @@ var query_saveSnippetNew = function(params, onSuccess, onError) {
                             }
                             else {
                                 onSuccess(uniqueId);
+                                query_updateSnippetInfos({
+                                    Id: uniqueId,
+                                    Name: params['Name'],
+                                    Description: params['Description'],
+                                    Tags: params['Tags'],
+                                });
                             }
                         }
                     );
@@ -112,6 +118,12 @@ var query_saveSnippetById = function(params, onSuccess, onError) {
                         }
                         else {
                             onSuccess(version);
+                            query_updateSnippetInfos({
+                                Id: params['Id'],
+                                Name: params['Name'],
+                                Description: params['Description'],
+                                Tags: params['Tags'],
+                            });
                         }
                     }
                 );
@@ -129,6 +141,21 @@ var query_saveSnippetById = function(params, onSuccess, onError) {
             onError(error);
         }
     );
+};
+
+var query_updateSnippetInfos = function(params) {
+
+    var query = new tedious.Request(
+        "UPDATE dbo.Snippets " +
+        "SET [Name] = @Name, [Description] = @Description, [Tags] = @Tags " +
+        "WHERE [Id] = @Id",
+        function(err, rowCount, row) {}
+    );
+    query.addParameter('Id', tedious.TYPES.NVarChar , params['Id']);
+    query.addParameter('Name', tedious.TYPES.NVarChar, params['Name']);
+    query.addParameter('Description', tedious.TYPES.NVarChar, params['Description']);
+    query.addParameter('Tags', tedious.TYPES.NVarChar, params['Tags']);
+    tediousService.execSql(query);
 };
 
 
