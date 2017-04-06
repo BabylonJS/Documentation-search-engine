@@ -14,6 +14,11 @@ var send200 = function(res, result) {
     res.header("Access-Control-Allow-Origin", "*");
     res.send(result);
 };
+var send201 = function(res, result) {
+    res.status(201);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.send(result);
+};
 var send204 = function(res) {
     res.status(204);
     res.header("Access-Control-Allow-Origin", "*");
@@ -25,7 +30,6 @@ var send400 = function(res) {
     res.send("400 bad request.");
 };
 var send500 = function(res, error) {
-    console.log(error);
     res.status(500);
     res.header("Access-Control-Allow-Origin", "*");
     res.send("Internal server error.");
@@ -48,7 +52,7 @@ router.get('/', function(req, res) {
     // base.query(
     //     "getSnippets", {},
     //     function(result) {
-    //         if(result != null) send200(res, result);
+    //         if(result != null && result.length > 0) send200(res, result);
     //         else send204(res);
     //     },
     //     function(error) {
@@ -68,7 +72,7 @@ router.get('/:id', function(req, res) {
                 "id": req.params.id
             },
             function(result) {
-                if(result != null) send200(res, result);
+                if(result != null && result.length > 0) send200(res, result);
                 else send204(res);
             },
             function(error) {
@@ -91,7 +95,7 @@ router.get('/:id/:version', function(req, res) {
                 'version': req.params.version
             },
             function(result) {
-                if(result != null) send200(res, result);
+                if(result != null && result.length > 0) send200(res, result);
                 else send204(res);
             },
             function(error) {
@@ -121,7 +125,7 @@ router.post('/search/code', function(req, res) {
                 "pageSize": req.body.pageSize
             },
             function(results) {
-                if(results != null) {
+                if(results != null && results.length > 0) {
                     send200(res,results);
                 }
                 else send204(res);
@@ -151,7 +155,7 @@ router.post('/search/name', function(req, res) {
                 "pageSize": req.body.pageSize
             },
             function(results) {
-                if(results != null) {
+                if(results != null && results.length > 0) {
                     send200(res,results);
                 }
                 else send204(res);
@@ -181,7 +185,7 @@ router.post('/search/tags', function(req, res) {
                 "pageSize": req.body.pageSize
             },
             function(results) {
-                if(results != null) {
+                if(results != null && results.length > 0) {
                     send200(res,results);
                 }
                 else send204(res);
@@ -204,7 +208,7 @@ router.post('/count/code', function(req, res) {
                 "terms": req.body.search
             },
             function(result) {
-                if(result != null) send200(res, result);
+                if(result != null && result.length > 0) send200(res, result);
                 else send204(res);
             },
             function(error) {
@@ -223,7 +227,7 @@ router.post('/count/name', function(req, res) {
                 "terms": req.body.search
             },
             function(result) {
-                if(result != null) send200(res, result);
+                if(result != null && result.length > 0) send200(res, result);
                 else send204(res);
             },
             function(error) {
@@ -242,7 +246,7 @@ router.post('/count/tags', function(req, res) {
                 "terms": req.body.search
             },
             function(result) {
-                if(result != null) send200(res, result);
+                if(result != null && result.length > 0) send200(res, result);
                 else send204(res);
             },
             function(error) {
@@ -275,7 +279,9 @@ router.post('/', function(req, res) {
                 'Tags': req.body.tags
             },
             function(result) {
-                send200(res, result);
+                send201(res, {
+                    id: result.toString()
+                });
             },
             function(error) {
                 send500(res, error);
@@ -305,7 +311,10 @@ router.post('/:id', function(req, res) {
                 'Tags': req.body.tags
             },
             function (result) {
-                send200(res, result);
+                send201(res, {
+                    id: req.params.id.toString(),
+                    version: result.toString()
+                });
             },
             function (error) {
                 send500(res, error);
