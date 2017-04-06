@@ -10,22 +10,6 @@ module.exports = function (app) {
         res.sendFile(path.join(__dirname, '../', '/public/index.html'));
     });
 
-    // Test the auth with the very basic token
-    // var basicToken = function(req, res, next) {
-    //
-    //     next();
-    //     return;
-    //
-    //     // if(req.header("token") && require('../basicToken.js')(req.header("token"))) {
-    //     //     next();
-    //     // }
-    //     // else {
-    //     //     res.status(401);
-    //     //     res.sendFile(path.join(__dirname, '../', '/public/401.html'));
-    //     // }
-    // };
-    // app.use(basicToken);
-
     // API routes
     app.use('/snippets', require('./routes/snippets'));
 
@@ -60,8 +44,8 @@ module.exports = function (app) {
 
 // RETURNS
 // res.statusCode = 204;                    // Status code
-// res.send('Error 204: No result found');  // Envoyer un texte
-// res.json(q);                             // Envoyer du JSON
+// res.send('Error 204: No result found');  // Send text
+// res.json(q);                             // Send pure json
 
 // GET
 // app.get('/link/:param&:param2')  // Get parameters
@@ -73,8 +57,8 @@ module.exports = function (app) {
 // requ.body.text                   // Get the variable content
 
 // CRUD
-//  /api/bears	            GET	Get all the bears.
+//  /api/bears	            GET	    Get all the bears.
 //  /api/bears	            POST	Create a bear.
-//  /api/bears/:bear_id	    GET	Get a single bear.
-//  /api/bears/:bear_id	    PUT	Update a bear with new info.
+//  /api/bears/:bear_id	    GET	    Get a single bear.
+//  /api/bears/:bear_id	    PUT	    Update a bear with new info.
 //  /api/bears/:bear_id	    DELETE	Delete a bear.
