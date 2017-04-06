@@ -44,7 +44,7 @@ router.get('/', function(req, res) {
     res.header("Access-Control-Allow-Origin", "*");
     res.send("I won't catch'em all!");
 
-    // For debugging purpose only.
+    // // For debugging purpose only.
     // base.query(
     //     "getSnippets", {},
     //     function(result) {
@@ -149,37 +149,27 @@ router.post('/search/name', function(req, res) {
     }
     else
     {
-        if(req.body.search == null
-            || req.body.page == null
-            || req.body.pageSize == null
-            || req.body.includePayload == null)
-        {
-            send400(res);
-        }
-        else
-        {
-            base.query(
-                "searchSnippetByName", {
-                    "terms": req.body.search
-                },
-                function(results) {
-                    if(results != null) {
-                        send200(res,
-                            filterPages(
-                                results,
-                                req.body.page,
-                                req.body.pageSize,
-                                req.body.includePayload
-                            )
-                        );
-                    }
-                    else send204(res);
-                },
-                function(error) {
-                    send500(res, error);
+        base.query(
+            "searchSnippetByName", {
+                "terms": req.body.search
+            },
+            function(results) {
+                if(results != null) {
+                    send200(res,
+                        filterPages(
+                            results,
+                            req.body.page,
+                            req.body.pageSize,
+                            req.body.includePayload
+                        )
+                    );
                 }
-            );
-        }
+                else send204(res);
+            },
+            function(error) {
+                send500(res, error);
+            }
+        );
     }
 });
 // Search in tags
@@ -194,37 +184,27 @@ router.post('/search/tags', function(req, res) {
     }
     else
     {
-        if(req.body.search == null
-            || req.body.page == null
-            || req.body.pageSize == null
-            || req.body.includePayload == null)
-        {
-            send400(res);
-        }
-        else
-        {
-            base.query(
-                "searchSnippetByTags", {
-                    "terms": req.body.search
-                },
-                function(results) {
-                    if(results != null) {
-                        send200(res,
-                            filterPages(
-                                results,
-                                req.body.page,
-                                req.body.pageSize,
-                                req.body.includePayload
-                            )
-                        );
-                    }
-                    else send204(res);
-                },
-                function(error) {
-                    send500(res, error);
+        base.query(
+            "searchSnippetByTags", {
+                "terms": req.body.search
+            },
+            function(results) {
+                if(results != null) {
+                    send200(res,
+                        filterPages(
+                            results,
+                            req.body.page,
+                            req.body.pageSize,
+                            req.body.includePayload
+                        )
+                    );
                 }
-            );
-        }
+                else send204(res);
+            },
+            function(error) {
+                send500(res, error);
+            }
+        );
     }
 });
 
