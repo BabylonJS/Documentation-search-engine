@@ -3,11 +3,9 @@
   "version": "0.0.1",
   "description": "API for the Babylon Playground",
   "dependencies": {
-    "azure-storage": "latest",
     "body-parser": "latest",
     "crypto": "latest",
     "express": "latest",
-    "mysql": "latest",
     "random-key": "latest",
     "tedious": "latest"
   },
