@@ -53,7 +53,7 @@ var statusMessagePost = document.getElementById('statusMessagePost');
 // }
 
 function onGetSnippetClick() {
-    var url = snippetApiBaseUrl+document.getElementById("snippetUrl").value;
+    var url = snippetApiBaseUrl + document.getElementById("snippetUrl").value;
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState == 4) {
@@ -63,19 +63,19 @@ function onGetSnippetClick() {
                     alert(xmlHttp.responseText);
                     break;
                 case 204:
-                statusMessageGet.innerText = 'No content';
+                    statusMessageGet.innerText = 'No content';
                     console.warn('No content');
                     break;
                 case 400:
-                statusMessageGet.innerText = 'Bad request';
+                    statusMessageGet.innerText = 'Bad request';
                     console.error('Bad request');
                     break;
                 case 401:
-                statusMessageGet.innerText = 'Unauthorized';
+                    statusMessageGet.innerText = 'Unauthorized';
                     console.error('Unauthorized');
                     break;
                 case 404:
-                statusMessageGet.innerText = 'Not found';
+                    statusMessageGet.innerText = 'Not found';
                     console.error('Not found');
                     break;
                 case 500:
@@ -91,6 +91,9 @@ function onGetSnippetClick() {
 }
 
 function onSearchSnippetClick(searchType) {
+    var numberSnippets = 0;
+    document.getElementById('numberResults').innerText = 'Counting results...';
+    //numberSnippets = 0;
     var url = snippetApiBaseUrl + "search";
     switch (searchType) {
         case 'snippetSearchDesc':
@@ -103,6 +106,34 @@ function onSearchSnippetClick(searchType) {
             url += '/code/';
             break;
     }
+
+    var xmlHttpNumber = new XMLHttpRequest();
+    xmlHttpNumber.onreadystatechange = function () {
+        if (xmlHttpNumber.readyState == 4) {
+            switch (xmlHttpNumber.status) {
+                case 200:
+                    var searchResponse = JSON.parse(xmlHttpNumber.responseText);
+                    document.getElementById('numberResults').innerText = numberSnippets +' / '+searchResponse.count + ' results';
+
+                    break;
+                case 204:
+                    console.warn('No content');
+                    break;
+                case 400:
+                    console.error('Bad request');
+                    break;
+                case 401:
+                    console.error('Unauthorized');
+                    break;
+                case 404:
+                    console.error('Not found');
+                    break;
+                case 500:
+                    console.error('Internal server error');
+                    break;
+            }
+        }
+    }
     document.getElementById("searchResults").value = "";
 
     var xmlHttp = new XMLHttpRequest();
@@ -112,31 +143,31 @@ function onSearchSnippetClick(searchType) {
                 case 200:
                     var searchResponse = JSON.parse(xmlHttp.responseText);
                     for (var snippetIndex of searchResponse) {
+                        numberSnippets++;
                         document.getElementById("searchResults").value += (snippetIndex.id + "\r\n");
                     }
                     break;
                 case 204:
-                statusMessagePost.innerText = 'No content';
                     console.warn('No content');
                     break;
                 case 400:
-                statusMessagePost.innerText = 'Bad request';
                     console.error('Bad request');
                     break;
                 case 401:
-                statusMessagePost.innerText = 'Unauthorized';
                     console.error('Unauthorized');
                     break;
                 case 404:
-                statusMessagePost.innerText = 'Not found';
                     console.error('Not found');
                     break;
                 case 500:
-                statusMessagePost.innerText = 'Internal server error';
                     console.error('Internal server error');
                     break;
             }
+            xmlHttpNumber.send(JSON.stringify({
+                "search": document.getElementById(searchType).value,
+            }));
         }
+        //document.getElementById('numberResults').innerHTML = numberSnippets + ' results';
     }
 
     xmlHttp.open("POST", url, true);
@@ -146,9 +177,14 @@ function onSearchSnippetClick(searchType) {
     xmlHttp.send(JSON.stringify({
         "search": document.getElementById(searchType).value,
         "page": 0,
-        "pageSize": 10,
+        "pageSize": 25,
         "includePayload": false
     }));
+
+    xmlHttpNumber.open("POST", snippetApiBaseUrl + 'count/code', true);
+    xmlHttpNumber.setRequestHeader('Access-Control-Allow-Origin', '*');
+    //Send the proper header information along with the request
+    xmlHttpNumber.setRequestHeader("Content-type", "application/json");
 }
 
 //document.getElementById("btnSaveSnippet").addEventListener("click", onSaveNewSnippetClick);
