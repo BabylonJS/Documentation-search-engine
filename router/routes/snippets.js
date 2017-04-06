@@ -116,18 +116,13 @@ router.post('/search/code', function(req, res) {
     {
         base.query(
             "searchSnippetByCode", {
-                "terms": req.body.search
+                "terms": req.body.search,
+                "page": req.body.page,
+                "pageSize": req.body.pageSize
             },
             function(results) {
                 if(results != null) {
-                    send200(res,
-                        filterPages(
-                            results,
-                            req.body.page,
-                            req.body.pageSize,
-                            req.body.includePayload
-                        )
-                    );
+                    send200(res,results);
                 }
                 else send204(res);
             },
@@ -151,18 +146,13 @@ router.post('/search/name', function(req, res) {
     {
         base.query(
             "searchSnippetByName", {
-                "terms": req.body.search
+                "terms": req.body.search,
+                "page": req.body.page,
+                "pageSize": req.body.pageSize
             },
             function(results) {
                 if(results != null) {
-                    send200(res,
-                        filterPages(
-                            results,
-                            req.body.page,
-                            req.body.pageSize,
-                            req.body.includePayload
-                        )
-                    );
+                    send200(res,results);
                 }
                 else send204(res);
             },
@@ -186,19 +176,73 @@ router.post('/search/tags', function(req, res) {
     {
         base.query(
             "searchSnippetByTags", {
-                "terms": req.body.search
+                "terms": req.body.search,
+                "page": req.body.page,
+                "pageSize": req.body.pageSize
             },
             function(results) {
                 if(results != null) {
-                    send200(res,
-                        filterPages(
-                            results,
-                            req.body.page,
-                            req.body.pageSize,
-                            req.body.includePayload
-                        )
-                    );
+                    send200(res,results);
                 }
+                else send204(res);
+            },
+            function(error) {
+                send500(res, error);
+            }
+        );
+    }
+});
+
+// Get search count
+router.post('/count/code', function(req, res) {
+
+    if(req.body.search == null) send400(res);
+    else
+    {
+        base.query(
+            "countSnippetByCode", {
+                "terms": req.body.search
+            },
+            function(result) {
+                if(result != null) send200(res, result);
+                else send204(res);
+            },
+            function(error) {
+                send500(res, error);
+            }
+        );
+    }
+});
+router.post('/count/name', function(req, res) {
+
+    if(req.body.search == null) send400(res);
+    else
+    {
+        base.query(
+            "countSnippetByName", {
+                "terms": req.body.search
+            },
+            function(result) {
+                if(result != null) send200(res, result);
+                else send204(res);
+            },
+            function(error) {
+                send500(res, error);
+            }
+        );
+    }
+});
+router.post('/count/tags', function(req, res) {
+
+    if(req.body.search == null) send400(res);
+    else
+    {
+        base.query(
+            "countSnippetByTags", {
+                "terms": req.body.search
+            },
+            function(result) {
+                if(result != null) send200(res, result);
                 else send204(res);
             },
             function(error) {
@@ -270,24 +314,6 @@ router.post('/:id', function(req, res) {
     }
 });
 
-
-// ***************************** UTILITIES *****************************
-
-var filterPages = function(snippets, page, pageSize, includePayload) {
-    var filteredResults = [];
-    var i = 0;
-
-    for(i = 0; i < page * pageSize; i++) {
-        snippets.shift();
-    }
-    for(i = 0; i < pageSize; i++) {
-        if(!snippets[i]) break;
-        if(!includePayload) snippets[i].JsonPayload = null;
-        filteredResults.push(snippets[i]);
-    }
-
-    return filteredResults;
-};
 
 
 module.exports = router;
