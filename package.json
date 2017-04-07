@@ -1,0 +1,20 @@
+{
+  "name": "babylonjsplaygroundAPI",
+  "version": "0.0.1",
+  "description": "API for the Babylon Playground",
+  "dependencies": {
+    "body-parser": "latest",
+    "crypto": "latest",
+    "express": "latest",
+    "random-key": "latest",
+    "tedious": "latest"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BabylonJS/Documentation-server"
+  },
+  "homepage": "",
+  "main": "app.js",
+  "author": "Keyveo"
+}
