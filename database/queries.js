@@ -234,6 +234,7 @@ var query_getSnippetByIdAndVersion = function(params, onSuccess, onError) {
 var query_searchSnippetByCode = function(params, onSuccess, onError) {
 
     var next = function() {
+        var terms = params["terms"].replace(/[{()}]/g, '');
 
         var query = new tedious.Request(
             // "SELECT [Id]" +
@@ -250,7 +251,7 @@ var query_searchSnippetByCode = function(params, onSuccess, onError) {
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE CONTAINS(JsonPayload, \'" + params["terms"] + "\') " +
+            "    WHERE CONTAINS(JsonPayload, \'" + terms + "\') " +
             "    GROUP BY Id" +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
@@ -278,6 +279,7 @@ var query_searchSnippetByCode = function(params, onSuccess, onError) {
 var query_searchSnippetByName = function(params, onSuccess, onError) {
 
     var next = function() {
+        var terms = params["terms"].replace(/[{()}]/g, '');
 
         var query = new tedious.Request(
             // "SELECT [Id]" +
@@ -294,8 +296,8 @@ var query_searchSnippetByName = function(params, onSuccess, onError) {
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE Name LIKE \'%" + params["terms"] + "%\' " +
-            "       OR [Description] LIKE \'%" + params["terms"] + "%\' " +
+            "    WHERE Name LIKE \'%" + terms + "%\' " +
+            "       OR [Description] LIKE \'%" + terms + "%\' " +
             "    GROUP BY Id " +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
@@ -323,6 +325,7 @@ var query_searchSnippetByName = function(params, onSuccess, onError) {
 var query_searchSnippetByTags = function(params, onSuccess, onError) {
 
     var next = function() {
+        var terms = params["terms"].replace(/[{()}]/g, '');
 
         var query = new tedious.Request(
             // "SELECT [Id]" +
@@ -338,7 +341,7 @@ var query_searchSnippetByTags = function(params, onSuccess, onError) {
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE Tags LIKE \'%" + params["terms"] + "%\' " +
+            "    WHERE Tags LIKE \'%" + terms + "%\' " +
             "    GROUP BY Id " +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
@@ -367,6 +370,7 @@ var query_searchSnippetByTags = function(params, onSuccess, onError) {
 var query_countSnippetByCode = function(params, onSuccess, onError) {
 
     var next = function() {
+        var terms = params["terms"].replace(/[{()}]/g, '');
 
         var query = new tedious.Request(
             "SELECT COUNT(dbo.Snippets.Id) " +
@@ -374,7 +378,7 @@ var query_countSnippetByCode = function(params, onSuccess, onError) {
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE CONTAINS(JsonPayload, \'" + params["terms"] + "\') " +
+            "    WHERE CONTAINS(JsonPayload, \'" + terms + "\') " +
             "    GROUP BY Id " +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
@@ -402,6 +406,7 @@ var query_countSnippetByCode = function(params, onSuccess, onError) {
 var query_countSnippetByName = function(params, onSuccess, onError) {
 
     var next = function() {
+        var terms = params["terms"].replace(/[{()}]/g, '');
 
         var query = new tedious.Request(
             "SELECT COUNT(dbo.Snippets.Id) " +
@@ -409,8 +414,8 @@ var query_countSnippetByName = function(params, onSuccess, onError) {
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE Name LIKE \'%" + params["terms"] + "%\' " +
-            "        OR [Description] LIKE \'%" + params["terms"] + "%\' " +
+            "    WHERE Name LIKE \'%" + terms + "%\' " +
+            "        OR [Description] LIKE \'%" + terms + "%\' " +
             "    GROUP BY Id " +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
@@ -438,6 +443,7 @@ var query_countSnippetByName = function(params, onSuccess, onError) {
 var query_countSnippetByTags = function(params, onSuccess, onError) {
 
     var next = function() {
+        var terms = params["terms"].replace(/[{()}]/g, '');
 
         var query = new tedious.Request(
             "SELECT COUNT(dbo.Snippets.Id) " +
@@ -445,7 +451,7 @@ var query_countSnippetByTags = function(params, onSuccess, onError) {
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE Tags LIKE \'%" + params["terms"] + "%\' " +
+            "    WHERE Tags LIKE \'%" + terms + "%\' " +
             "    GROUP BY Id " +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
