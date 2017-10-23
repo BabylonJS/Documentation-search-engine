@@ -231,35 +231,25 @@ var query_getSnippetByIdAndVersion = function(params, onSuccess, onError) {
 
 // ***************************** SEARCH *****************************
 
-var query_searchSnippetByCode = function(params, onSuccess, onError) {
-
-    var next = function() {
-        var terms = params["terms"].replace(/[{()}]/g, '');
+var query_searchSnippetByCode = function (params, onSuccess, onError) {
+    
+    var next = function () {
 
         var query = new tedious.Request(
-            // "SELECT [Id]" +
-            // ",[Version]" +
-            // ",[JsonPayload]" +
-            // ",[Name]" +
-            // ",[Description]" +
-            // ",[Tags]" +
-            // "FROM [dbo].[snippets]" +
-            // // "WHERE [JsonPayload] LIKE \'%" + params["terms"] + "%\'",
-            // "WHERE CONTAINS(JsonPayload, \'%" + params["terms"] + "%\')",
             "SELECT dbo.Snippets.Id, dbo.Snippets.[Version], dbo.Snippets.JsonPayload, dbo.Snippets.Name, dbo.Snippets.[Description], dbo.Snippets.Tags " +
             "FROM dbo.Snippets INNER JOIN " +
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE CONTAINS(JsonPayload, \'" + terms + "\') " +
+            "    WHERE CONTAINS(JsonPayload, \'\"" + params["terms"] + "\"\') " +
             "    GROUP BY Id" +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
             "WHERE dbo.Snippets.[Version] = subLastVersions.[Version] " +
             "ORDER BY dbo.Snippets.Id " +
             "OFFSET " + params["page"] * params["pageSize"] + " ROWS FETCH NEXT " + params["pageSize"] + " ROWS ONLY;",
-            function(err, rowCount, rows) {
-                if(err) {
+            function (err, rowCount, rows) {
+                if (err) {
                     onError(err);
                 }
                 else {
@@ -271,41 +261,31 @@ var query_searchSnippetByCode = function(params, onSuccess, onError) {
     };
 
     tediousService = new tedious.Connection(connectionConfig);
-    tediousService.on('connect', function(err) {
-        if(err) onError(err);
+    tediousService.on('connect', function (err) {
+        if (err) onError(err);
         else next();
     });
 };
-var query_searchSnippetByName = function(params, onSuccess, onError) {
+var query_searchSnippetByName = function (params, onSuccess, onError) {
 
-    var next = function() {
-        var terms = params["terms"].replace(/[{()}]/g, '');
+    var next = function () {
 
         var query = new tedious.Request(
-            // "SELECT [Id]" +
-            // ",[Version]" +
-            // ",[JsonPayload]" +
-            // ",[Name]" +
-            // ",[Description]" +
-            // ",[Tags]" +
-            // "FROM [dbo].[snippets]" +
-            // "WHERE [Name] LIKE \'%" + params["terms"] + "%\'" +
-            //     "OR [Description] LIKE \'%" + params["terms"] + "%\'",
             "SELECT dbo.Snippets.Id, dbo.Snippets.[Version], dbo.Snippets.JsonPayload, dbo.Snippets.Name, dbo.Snippets.[Description], dbo.Snippets.Tags " +
             "FROM dbo.Snippets INNER JOIN " +
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE Name LIKE \'%" + terms + "%\' " +
-            "       OR [Description] LIKE \'%" + terms + "%\' " +
+            "    WHERE Name LIKE \'%\"" + params["terms"] + "\"%\' " +
+            "       OR [Description] LIKE \'%\"" + params["terms"] + "\"%\' " +
             "    GROUP BY Id " +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
             "WHERE dbo.Snippets.[Version] = subLastVersions.[Version] " +
             "ORDER BY dbo.Snippets.Id " +
             "OFFSET " + params["page"] * params["pageSize"] + " ROWS FETCH NEXT " + params["pageSize"] + " ROWS ONLY;",
-            function(err, rowCount, rows) {
-                if(err) {
+            function (err, rowCount, rows) {
+                if (err) {
                     onError(err);
                 }
                 else {
@@ -317,39 +297,30 @@ var query_searchSnippetByName = function(params, onSuccess, onError) {
     };
 
     tediousService = new tedious.Connection(connectionConfig);
-    tediousService.on('connect', function(err) {
-        if(err) onError(err);
+    tediousService.on('connect', function (err) {
+        if (err) onError(err);
         else next();
     });
 };
-var query_searchSnippetByTags = function(params, onSuccess, onError) {
+var query_searchSnippetByTags = function (params, onSuccess, onError) {
 
-    var next = function() {
-        var terms = params["terms"].replace(/[{()}]/g, '');
+    var next = function () {
 
         var query = new tedious.Request(
-            // "SELECT [Id]" +
-            // ",[Version]" +
-            // ",[JsonPayload]" +
-            // ",[Name]" +
-            // ",[Description]" +
-            // ",[Tags]" +
-            // "FROM [dbo].[snippets]" +
-            // "WHERE [Tags] LIKE \'%" + params["terms"] + "%\'",
             "SELECT dbo.Snippets.Id, dbo.Snippets.[Version], dbo.Snippets.JsonPayload, dbo.Snippets.Name, dbo.Snippets.[Description], dbo.Snippets.Tags " +
             "FROM dbo.Snippets INNER JOIN " +
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE Tags LIKE \'%" + terms + "%\' " +
+            "    WHERE Tags LIKE \'%\"" + params["terms"] + "\"%\' " +
             "    GROUP BY Id " +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
             "WHERE dbo.Snippets.[Version] = subLastVersions.[Version] " +
             "ORDER BY dbo.Snippets.Id " +
             "OFFSET " + params["page"] * params["pageSize"] + " ROWS FETCH NEXT " + params["pageSize"] + " ROWS ONLY;",
-            function(err, rowCount, rows) {
-                if(err) {
+            function (err, rowCount, rows) {
+                if (err) {
                     onError(err);
                 }
                 else {
@@ -361,16 +332,15 @@ var query_searchSnippetByTags = function(params, onSuccess, onError) {
     };
 
     tediousService = new tedious.Connection(connectionConfig);
-    tediousService.on('connect', function(err) {
-        if(err) onError(err);
+    tediousService.on('connect', function (err) {
+        if (err) onError(err);
         else next();
     });
 };
 
-var query_countSnippetByCode = function(params, onSuccess, onError) {
+var query_countSnippetByCode = function (params, onSuccess, onError) {
 
-    var next = function() {
-        var terms = params["terms"].replace(/[{()}]/g, '');
+    var next = function () {
 
         var query = new tedious.Request(
             "SELECT COUNT(dbo.Snippets.Id) " +
@@ -378,13 +348,13 @@ var query_countSnippetByCode = function(params, onSuccess, onError) {
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE CONTAINS(JsonPayload, \'" + terms + "\') " +
+            "    WHERE CONTAINS(JsonPayload, \'\"" + params["terms"] + "\"\') " +
             "    GROUP BY Id " +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
             "WHERE dbo.Snippets.[Version] = subLastVersions.[Version] ",
-            function(err, rowCount, rows) {
-                if(err) {
+            function (err, rowCount, rows) {
+                if (err) {
                     onError(err);
                 }
                 else {
@@ -398,15 +368,14 @@ var query_countSnippetByCode = function(params, onSuccess, onError) {
     };
 
     tediousService = new tedious.Connection(connectionConfig);
-    tediousService.on('connect', function(err) {
-        if(err) onError(err);
+    tediousService.on('connect', function (err) {
+        if (err) onError(err);
         else next();
     });
 };
-var query_countSnippetByName = function(params, onSuccess, onError) {
+var query_countSnippetByName = function (params, onSuccess, onError) {
 
-    var next = function() {
-        var terms = params["terms"].replace(/[{()}]/g, '');
+    var next = function () {
 
         var query = new tedious.Request(
             "SELECT COUNT(dbo.Snippets.Id) " +
@@ -415,13 +384,13 @@ var query_countSnippetByName = function(params, onSuccess, onError) {
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
             "    WHERE Name LIKE \'%" + terms + "%\' " +
-            "        OR [Description] LIKE \'%" + terms + "%\' " +
+            "        OR [Description] LIKE \'%\"" + params["terms"] + "\"%\' " +
             "    GROUP BY Id " +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
             "WHERE dbo.Snippets.[Version] = subLastVersions.[Version] ",
-            function(err, rowCount, rows) {
-                if(err) {
+            function (err, rowCount, rows) {
+                if (err) {
                     onError(err);
                 }
                 else {
@@ -435,15 +404,14 @@ var query_countSnippetByName = function(params, onSuccess, onError) {
     };
 
     tediousService = new tedious.Connection(connectionConfig);
-    tediousService.on('connect', function(err) {
-        if(err) onError(err);
+    tediousService.on('connect', function (err) {
+        if (err) onError(err);
         else next();
     });
 };
-var query_countSnippetByTags = function(params, onSuccess, onError) {
+var query_countSnippetByTags = function (params, onSuccess, onError) {
 
-    var next = function() {
-        var terms = params["terms"].replace(/[{()}]/g, '');
+    var next = function () {
 
         var query = new tedious.Request(
             "SELECT COUNT(dbo.Snippets.Id) " +
@@ -451,13 +419,13 @@ var query_countSnippetByTags = function(params, onSuccess, onError) {
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE Tags LIKE \'%" + terms + "%\' " +
+            "    WHERE Tags LIKE \'%\"" + params["terms"] + "\"%\' " +
             "    GROUP BY Id " +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
             "WHERE dbo.Snippets.[Version] = subLastVersions.[Version] ",
-            function(err, rowCount, rows) {
-                if(err) {
+            function (err, rowCount, rows) {
+                if (err) {
                     onError(err);
                 }
                 else {
@@ -471,8 +439,8 @@ var query_countSnippetByTags = function(params, onSuccess, onError) {
     };
 
     tediousService = new tedious.Connection(connectionConfig);
-    tediousService.on('connect', function(err) {
-        if(err) onError(err);
+    tediousService.on('connect', function (err) {
+        if (err) onError(err);
         else next();
     });
 };
