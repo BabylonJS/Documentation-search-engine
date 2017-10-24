@@ -383,7 +383,7 @@ var query_countSnippetByName = function (params, onSuccess, onError) {
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE Name LIKE \'%" + terms + "%\' " +
+            "    WHERE Name LIKE \'%\"" + params["terms"] + "\"%\' " +
             "        OR [Description] LIKE \'%\"" + params["terms"] + "\"%\' " +
             "    GROUP BY Id " +
             ") subLastVersions " +
