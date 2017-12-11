@@ -312,7 +312,7 @@ var query_searchSnippetByTags = function (params, onSuccess, onError) {
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE Tags LIKE \'%\"" + params["terms"] + "\"%\' " +
+            "    WHERE Tags LIKE \'%" + params["terms"] + "%\' " +
             "    GROUP BY Id " +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
