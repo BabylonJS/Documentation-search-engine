@@ -241,7 +241,7 @@ var query_searchSnippetByCode = function (params, onSuccess, onError) {
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE CONTAINS(JsonPayload, \'\"" + params["terms"] + "\"\') " +
+            "    WHERE CONTAINS(JsonPayload, \'" + params["terms"] + "\') " +
             "    GROUP BY Id" +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
@@ -276,7 +276,7 @@ var query_searchSnippetByName = function (params, onSuccess, onError) {
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE Name LIKE \'%\"" + params["terms"] + "\"%\' " +
+            "    WHERE Name LIKE \'%" + params["terms"] + "%\' " +
             "       OR [Description] LIKE \'%\"" + params["terms"] + "\"%\' " +
             "    GROUP BY Id " +
             ") subLastVersions " +
