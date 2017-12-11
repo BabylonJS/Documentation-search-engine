@@ -348,7 +348,7 @@ var query_countSnippetByCode = function (params, onSuccess, onError) {
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE CONTAINS(JsonPayload, \'\"" + params["terms"] + "\"\') " +
+            "    WHERE CONTAINS(JsonPayload, \'" + params["terms"] + "\') " +
             "    GROUP BY Id " +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
@@ -383,8 +383,8 @@ var query_countSnippetByName = function (params, onSuccess, onError) {
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE Name LIKE \'%\"" + params["terms"] + "\"%\' " +
-            "        OR [Description] LIKE \'%\"" + params["terms"] + "\"%\' " +
+            "    WHERE Name LIKE \'%" + params["terms"] + "%\' " +
+            "        OR [Description] LIKE \'%" + params["terms"] + "%\' " +
             "    GROUP BY Id " +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
@@ -419,7 +419,7 @@ var query_countSnippetByTags = function (params, onSuccess, onError) {
             "( " +
             "    SELECT Id, MAX(Version) AS Version " +
             "    FROM dbo.Snippets " +
-            "    WHERE Tags LIKE \'%\"" + params["terms"] + "\"%\' " +
+            "    WHERE Tags LIKE \'%" + params["terms"] + "%\' " +
             "    GROUP BY Id " +
             ") subLastVersions " +
             "ON dbo.Snippets.Id = subLastVersions.Id " +
